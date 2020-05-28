@@ -6,11 +6,7 @@ from pathlib import Path
 import suite2p
 
 
-# Paths to .suite2p dir and .suite2p test_data dir
-suite_dir = Path(__file__).parent.parent.joinpath('data/test_data')
-test_data_dir = suite_dir
-print(test_data_dir)
-
+test_data_dir = Path(__file__).parent.parent.joinpath('data/test_data')
 
 
 @pytest.fixture()

@@ -1,0 +1,7 @@
+md5: 6d12bc6ba69d59a63dd176a8ead2eb0e
+outs:
+- md5: 766c979a8d01fd5b65aea91e1c796171.dir
+  path: io_data
+  cache: true
+  metric: false
+  persist: false

@@ -2,27 +2,7 @@ import pytest
 import shutil
 import numpy as np
 from pathlib import Path
-
 import suite2p
-
-
-test_data_dir = Path(__file__).parent.parent.joinpath('data/test_data')
-
-
-@pytest.fixture()
-def setup_and_teardown(tmpdir):
-    """
-    Initializes ops to be used for test. Also, uses tmpdir fixture to create a unique temporary dir for
-    each test. Then, removes temporary directory after test is completed.
-    """
-    ops = suite2p.default_ops()
-    ops['data_path'] = [test_data_dir]
-    ops['save_path0'] = str(tmpdir)
-    yield ops, str(tmpdir)
-    tmpdir_path = Path(str(tmpdir))
-    if tmpdir_path.is_dir():
-        shutil.rmtree(tmpdir)
-        print('Successful removal of tmp_path {}.'.format(tmpdir))
 
 
 class TestCommonPipelineUseCases:
@@ -30,7 +10,7 @@ class TestCommonPipelineUseCases:
     Class that tests common use cases for pipeline.
     """
 
-    def check_output_gt(self, output_root, nplanes: int, nchannels: int):
+    def check_output_gt(self, output_root, test_data_dir, nplanes: int, nchannels: int):
         """
         Helper function to check if outputs given by a test are exactly the same
         as the ground truth outputs.
@@ -58,7 +38,7 @@ class TestCommonPipelineUseCases:
                 else:
                     assert np.allclose(test_data, output_data, rtol=rtol, atol=atol)
 
-    def test_1plane_1chan(self, setup_and_teardown):
+    def test_1plane_1chan(self, setup_and_teardown, get_test_dir_path):
         """
         Tests for case with 1 plane and 1 channel
         """
@@ -66,18 +46,18 @@ class TestCommonPipelineUseCases:
         ops, tmp_dir = setup_and_teardown
         suite2p.run_s2p(ops=ops)
         # Check outputs against ground_truth files
-        self.check_output_gt(tmp_dir, ops['nplanes'], ops['nchannels'])
+        self.check_output_gt(tmp_dir, get_test_dir_path, ops['nplanes'], ops['nchannels'])
 
-    def test_2plane_1chan(self, setup_and_teardown):
+    def test_2plane_1chan(self, setup_and_teardown, get_test_dir_path):
         """
         Tests for case with 2 planes and 1 channel.
         """
         ops, tmp_dir = setup_and_teardown
         ops['nplanes'] = 2
         suite2p.run_s2p(ops=ops)
-        self.check_output_gt(tmp_dir, ops['nplanes'], ops['nchannels'])
+        self.check_output_gt(tmp_dir, get_test_dir_path, ops['nplanes'], ops['nchannels'])
 
-    def test_2plane_2chan(self, setup_and_teardown):
+    def test_2plane_2chan(self, setup_and_teardown, get_test_dir_path):
         """
         Tests for case with 2 planes and 2 channels.
         """
@@ -85,4 +65,4 @@ class TestCommonPipelineUseCases:
         ops['nplanes'] = 2
         ops['nchannels'] = 2
         suite2p.run_s2p(ops=ops)
-        self.check_output_gt(tmp_dir, ops['nplanes'], ops['nchannels'])
+        self.check_output_gt(tmp_dir, get_test_dir_path, ops['nplanes'], ops['nchannels'])

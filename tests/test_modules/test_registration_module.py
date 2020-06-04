@@ -17,6 +17,7 @@ def prepare_for_registration(op, input_file_name, dimensions):
         str(input_file_name)
     ) // 2).astype(np.int16)
     bin_file_path = str(Path(op['save_path0']).joinpath('data.bin'))
+    op['raw_file_align'] = [bin_file_path]
     # Generate binary file
     with open(bin_file_path, 'wb') as f:
         f.write(input_data)

@@ -7,6 +7,8 @@ from pathlib import Path
 from tifffile import imread
 from suite2p import registration
 
+generated_tif_fn = 'file000_chan0.tif'
+
 
 def prepare_for_registration(op, input_file_name, dimensions):
     """
@@ -57,28 +59,19 @@ def test_register_binary_output_with_metrics(default_ops):
 
 def test_register_binary_do_bidi_output(default_ops):
     """
-    Regression test that checks the output of register_binary given the `input.tif` with the bidiphase,
+    Regression test that checks the output of register_binary given the `bidi_shift_input.tif`.
+    1Preg is also set with a different smooth_sigma_time.
     """
     default_ops['do_bidiphase'] = True
-    check_registration_output(
-        default_ops, (404, 360),
-        default_ops['data_path'][0].joinpath('registration', 'bidi_shift_input.tif'),
-        str(Path(default_ops['save_path0']).joinpath('reg_tif', 'file000_chan0.tif')),
-        str(Path(default_ops['data_path'][0]).joinpath('registration', 'regression_bidi_output.tif'))
-    )
-
-def test_register_binary_1preg_output(default_ops):
-    """
-    Regression test that checks the output of register_binary with 1Preg given the `input.tif`.
-    """
     default_ops['1Preg'] = True
     default_ops['smooth_sigma_time'] = 1
     check_registration_output(
         default_ops, (404, 360),
-        default_ops['data_path'][0].joinpath('input.tif'),
-        str(Path(default_ops['save_path0']).joinpath('reg_tif', 'file000_chan0.tif')),
-        str(Path(default_ops['data_path'][0]).joinpath('registration', 'regression_1preg_output.tif'))
+        default_ops['data_path'][0].joinpath('registration', 'bidi_shift_input.tif'),
+        str(Path(default_ops['save_path0']).joinpath('reg_tif', generated_tif_fn)),
+        str(Path(default_ops['data_path'][0]).joinpath('registration', 'regression_bidi_1preg_output.tif'))
     )
+
 
 def test_register_binary_rigid_registration_only(default_ops):
     """

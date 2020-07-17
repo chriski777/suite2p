@@ -1,4 +1,3 @@
-import os
 import numpy as np
 from pathlib import Path
 from . import Classifier
@@ -32,7 +31,7 @@ def classify(ops, stat, keys=['npix_norm', 'compact', 'skew']):
         classfile = user_dir.joinpath('classifiers', 'classifier_user.npy')
         if not Path(classfile).is_file():
             s2p_dir = Path(__file__).parent.parent
-            classfile = os.fspath(s2p_dir.joinpath('classifiers', 'classifier.npy'))
+            classfile = str(s2p_dir.joinpath('classifiers', 'classifier.npy'))
         print('NOTE: applying classifier %s'%classfile)
         for k in keys:
             if k not in stat[0]:

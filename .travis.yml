@@ -1,4 +1,7 @@
 language: python
+dist: xenial
+services:
+  - xvfb
 jobs:
   include:
   - name: Python 3.7.1 on Linux
@@ -40,12 +43,7 @@ install:
 - pip install .[data]
 - dvc pull -r gdrive-travis
 - pip install coveralls
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start || echo \"Unable to start virtual display.\""
-  - sleep 3 # give xvfb some time to start
 script:
-- xvfb-run make test
 - coverage run --source=suite2p setup.py test
 after_success: coveralls
 deploy:
